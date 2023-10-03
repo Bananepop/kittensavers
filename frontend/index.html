@@ -22,13 +22,14 @@
 
     <script>
         const saveKitten = () => {
-            fetch('https://jsonplaceholder.typicode.com/users') // fetch means query data from a remote end point (url) asynchronous function
+            var kittenNumber=document.getElementById("kittenNumber").value
+            fetch('http://localhost:3000/kitten?kitten='+kittenNumber) // fetch means query data from a remote end point (url) asynchronous function
                 .then(response => response.json())
                 .then(json => {
                     console.log(json)
                 })
         }
-    </script>
+    </script> 
 </body>
 
 </html>

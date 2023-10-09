@@ -25,6 +25,17 @@ const prisonedKittens = [ // Server side data - invisible to the frontend/client
         code: 38
     },
 ]
+
+const users = [
+    {
+        name: "gaby",
+        password: "password123"
+    },
+    {
+        name: 'tommy',
+        password: "ilovechocolate"
+    }
+]
 // TODO DONE Create a const with released Kittens
 let releasedKittens = [] // Here we use a classical stack pattern. First we have a list of prisoneCats, then we fill a `stack` with the ones we wanna filter
 
@@ -52,7 +63,17 @@ app.get('/survivors', (req, res) => {
 
 app.post('/logintobackend', (req, res) => {
     console.log('req.body', req.body); // example to test
-    return res.json({ message: "LOGGED IN SUCCESFUL AS " + req.body.username }) 
+    const personQueryied = users.find(user => user.name === req.body.username)
+    if (personQueryied) {
+        if (req.body.password === personQueryied.password) {
+            return res.json({ message: "LOGGED IN SUCCESFUL AS " + req.body.username })
+        } else {
+            return res.json({ message: "Wrong password" })
+        }
+    } else {
+        return res.json({ message: "Username not found" })
+    }
+    console.log(personQueryied)
 })
 // If you run node index.js, the server starts to listen
 app.listen(port, () => {

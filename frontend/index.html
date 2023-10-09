@@ -10,6 +10,18 @@
 <body>
     <h1>Welcome to Kitten Savers</h1>
 
+    <h2>Login</h2>
+
+    <form>
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" />
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" />
+
+        <button type="submit">Submit</button>
+    </form>
+
     <h2>A kitten between 0 and 10:</h2>
     <input type="text" id="kittenNumber">
     <button onclick="saveKitten()">Guess the Kitten Number</button>
@@ -21,13 +33,33 @@
 
 
     <script>
+        const form = document.querySelector("form")
+        function submitForm(event) {
+            event.preventDefault() // Usually form elements, when they get submitted, reload the page and put the info inthe query params => ?username=Gaby&password=1234566. thats not good, we wanna handle our self
+            const username = event.srcElement[0].value // When the form submits, extract the values from the submit-event. The form has form-fields, which have values, which can be queried
+            const password = event.srcElement[1].value
+            console.log("Username+password: ", username, password);
+            fetch('http://localhost:3000/logintobackend', {
+                method: "POST",
+                body: JSON.stringify({ username: username, password: password }), // we send TWO values to backend
+                headers: {
+                    'content-type': 'application/json' // neccesary for telling the backend what for request content type you want to have. txt,json,csv,file
+                }
+            }) // fetch means query data from a remote end point (url) asynchronous function
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json) // response from the /logintobacknd endpoint
+                }) 
+        }
+        form.addEventListener('submit', submitForm);
+
         const saveKitten = () => {
             var kittenNumber = document.getElementById("kittenNumber").value
             fetch('http://localhost:3000/kitten', {
                 method: "POST",
                 body: JSON.stringify({ kitten: kittenNumber }),
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json' // neccesary for telling the backend what for request content type you want to have. txt,json,csv,file
                 }
             }) // fetch means query data from a remote end point (url) asynchronous function
                 .then(response => response.json())

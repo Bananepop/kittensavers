@@ -50,6 +50,10 @@ app.get('/survivors', (req, res) => {
     return res.json({ message: releasedKittens }) // This will response to the client or frontend, who ever calls this endpoint
 })
 
+app.post('/logintobackend', (req, res) => {
+    console.log('req.body', req.body); // example to test
+    return res.json({ message: "LOGGED IN SUCCESFUL AS " + req.body.username }) 
+})
 // If you run node index.js, the server starts to listen
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

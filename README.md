@@ -9,3 +9,7 @@
 ## usage
 - Start liveserver in frontend
 - Use interface to guess the kitten
+- curl http://localhost:3000/kitten\?kitten\=54
+- curl http://localhost:3000/survivors
+- curl -X POST -d '{"kitten": "43"}' -H "Content-Type: application/json" http://localhost:3000/kitten 
+	- {"message":"Saved Kitten Linda"}%

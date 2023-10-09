@@ -1,8 +1,14 @@
 var express = require('express')
 var cors = require('cors')
 var app = express()
-
+app.use(express.json());
 app.use(cors())
+// TODO we want to persist the state of the released kitten also after server stop
+// 1. Before we did curl localhost:3000/kitten?kitten=54  54 is actually POST info. Make app.get('/kitten ) to a POST endpoint
+// 2. Call that endpoinit from the fronend also with POST
+// 3. Install postgres npm packaae
+// 3. Store that stuff in the DB
+// 4. Read from DB in /survivors
 
 const port = 3000
 const prisonedKittens = [ // Server side data - invisible to the frontend/client. Nobody sees what you do in the backend, except you expose it to the clients with res.json/res.text
@@ -22,10 +28,12 @@ const prisonedKittens = [ // Server side data - invisible to the frontend/client
 // TODO DONE Create a const with released Kittens
 let releasedKittens = [] // Here we use a classical stack pattern. First we have a list of prisoneCats, then we fill a `stack` with the ones we wanna filter
 
-app.get('/kitten', (req, res) => {
-    console.log(Date.now(), req.query) // Print a time stamp in the server console
 
-    const foundKitten = prisonedKittens.find(kitten => req.query.kitten == kitten.code)
+
+app.post('/kitten', (req, res) => {
+    console.log(Date.now(), req.body) // Print a time stamp in the server console
+
+    const foundKitten = prisonedKittens.find(kitten => req.body.kitten == kitten.code)
     if (foundKitten) {
         // TODO DONE Push into this array, when somebody submitted a key, that is found in the prisoned kittes
         releasedKittens.push(foundKitten)

@@ -5,34 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitten Savers</title>
+    <style>
+        .d-none {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Welcome to Kitten Savers</h1>
+    <div id="loginform">
+        <h2>Login</h2>
+        <form>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" />
 
-    <h2>Login</h2>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" />
 
-    <form>
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" />
-
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" />
-
-        <button type="submit">Submit</button>
-    </form>
-
-    <h2>A kitten between 0 and 10:</h2>
-    <input type="text" id="kittenNumber">
-    <button onclick="saveKitten()">Guess the Kitten Number</button>
-
-
-    <div id="guestList">
-        <!-- Guests will be displayed here -->
+            <button type="submit">Submit</button>
+        </form>
     </div>
 
+    <div id="content">
+        <h2>A kitten between 0 and 10:</h2>
+        <input type="text" id="kittenNumber">
+        <button onclick="saveKitten()">Guess the Kitten Number</button>
+
+        <div id="guestList">
+            <!-- Guests will be displayed here -->
+        </div>
+    </div>
 
     <script>
+        const isLoggedIn = localStorage.getItem('mylogintoken')
+        if (isLoggedIn) {
+            document.getElementById('loginform').classList.add('d-none')
+        } else {
+            document.getElementById('content').classList.add('d-none')
+        }
         const form = document.querySelector("form")
         function submitForm(event) {
             event.preventDefault() // Usually form elements, when they get submitted, reload the page and put the info inthe query params => ?username=Gaby&password=1234566. thats not good, we wanna handle our self
@@ -48,8 +59,14 @@
             }) // fetch means query data from a remote end point (url) asynchronous function
                 .then(response => response.json())
                 .then(json => {
-                    console.log(json) // response from the /logintobacknd endpoint
-                }) 
+                    if (json.token) {
+                        localStorage.setItem("mylogintoken", json.token)
+                        document.getElementById('loginform').classList.add('d-none')
+                        document.getElementById('content').classList.remove('d-none')
+                    } else {
+                        localStorage.removeItem('mylogintoken')
+                    }
+                })
         }
         form.addEventListener('submit', submitForm);
 

@@ -66,7 +66,7 @@ app.post('/logintobackend', (req, res) => {
     const personQueryied = users.find(user => user.name === req.body.username)
     if (personQueryied) {
         if (req.body.password === personQueryied.password) {
-            return res.json({ message: "LOGGED IN SUCCESFUL AS " + req.body.username })
+            return res.json({ message: "LOGGED IN SUCCESFUL AS " + req.body.username, token: "XXXXXXX" }) // VERY SECURE TOKEN
         } else {
             return res.json({ message: "Wrong password" })
         }
